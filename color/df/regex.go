@@ -11,7 +11,7 @@ func NewConfig() []tool.Conf {
 	return []tool.Conf{
 		{
 			// FS
-			Regex: regexp.MustCompile(`(?m)^(\/[-\w\d.]+)+\s`),
+			Regex: regexp.MustCompile(`(?m)^(\/[\w]+)+`),
 			Color: tool.Purple,
 		},
 		{
@@ -32,12 +32,12 @@ func NewConfig() []tool.Conf {
 		},
 		{
 			// Size 'G'
-			Regex: regexp.MustCompile(`\s\d*[.,]?\dGi?\s|\s\d{7,9}\s`),
+			Regex: regexp.MustCompile(`\s\d*[.,]?\dGi?\s|\s\d{7,9}`),
 			Color: tool.Red,
 		},
 		{
 			// Size 'T'
-			Regex: regexp.MustCompile(`\s\d*[.,]?\dTi?\s|\s\d{10,12}\s`),
+			Regex: regexp.MustCompile(`\s\d*[.,]?\dTi?\s|\s\d{10,12}`),
 			Color: tool.Red,
 		},
 		{
