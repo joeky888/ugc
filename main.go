@@ -82,7 +82,7 @@ func main() {
 	}()
 
 	if err := cmd.Start(); err != nil {
-		log.Fatalf("cmd.Start() failed with %s\n", err)
+		log.Fatalf("cmd.Start() failed with %v\n", err)
 	}
 
 	wg.Wait()
@@ -94,7 +94,7 @@ func main() {
 		} else {
 			log.Fatalf("cmd.Wait: %v", err)
 		}
-		log.Fatalf("cmd.Run() failed with %s\n", err)
+		log.Fatalf("cmd.Run() failed with %v\n", err)
 	}
 	if errStdout != nil || errStderr != nil {
 		log.Fatal("failed to capture stdout or stderr\n")
