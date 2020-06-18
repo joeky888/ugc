@@ -57,17 +57,6 @@ func CaptureWorker(config []Conf) {
 
 	var wg sync.WaitGroup
 	var errStdout, errStderr error
-	// var config []Conf
-
-	// switch bin {
-	// case "df":
-	// 	config = df.NewConfig()
-	// case "ping":
-	// 	config = ping.NewConfig()
-	// default:
-	// 	log.Printf("Command %s is not supported\n", bin)
-	// 	os.Exit(0)
-	// }
 
 	wg.Add(2)
 	go func() {
