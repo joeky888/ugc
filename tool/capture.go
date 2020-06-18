@@ -10,7 +10,7 @@ import (
 	"syscall"
 )
 
-func copyAndCapture(w io.Writer, r io.Reader, config []Conf) ([]byte, error) {
+func copyAndCapture(w io.Writer, r io.Reader, config []Conf) (error) {
 	// var out []byte
 	buf := make([]byte, 20480)
 	for {
@@ -31,14 +31,14 @@ func copyAndCapture(w io.Writer, r io.Reader, config []Conf) ([]byte, error) {
 			// Read returns io.EOF at the end of file, which is not an error for us
 			if err == io.EOF {
 				// err = nil
-				return nil, nil
+				return nil
 			}
-			return nil, err
+			return err
 		}
 	}
 	// never reached
 	panic(true)
-	return nil, nil
+	return nil
 }
 
 func CaptureWorker(config []Conf) {
@@ -60,11 +60,11 @@ func CaptureWorker(config []Conf) {
 
 	wg.Add(2)
 	go func() {
-		_, errStdout = copyAndCapture(os.Stdout, stdoutIn, config)
+		errStdout = copyAndCapture(os.Stdout, stdoutIn, config)
 		wg.Done()
 	}()
 	go func() {
-		_, errStderr = copyAndCapture(os.Stderr, stderrIn, config)
+		errStderr = copyAndCapture(os.Stderr, stderrIn, config)
 		wg.Done()
 	}()
 
