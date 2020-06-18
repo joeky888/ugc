@@ -66,9 +66,9 @@ func main() {
 
 	switch bin {
 	case "df":
-		config = df.Config
+		config = df.NewConfig()
 	case "ping":
-		config = ping.Config
+		config = ping.NewConfig()
 	}
 
 	wg.Add(2)
