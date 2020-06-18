@@ -53,11 +53,11 @@ func main() {
 
 	stdoutIn, outpipeErr := cmd.StdoutPipe()
 	if outpipeErr != nil {
-		log.Fatal("outpipeErr")
+		log.Fatalf("outpipeErr failed with %v\n", outpipeErr)
 	}
 	stderrIn, errpipeErr := cmd.StderrPipe()
 	if errpipeErr != nil {
-		log.Fatal("errpipeErr")
+		log.Fatalf("errpipeErr failed with %v\n", errpipeErr)
 	}
 
 	var wg sync.WaitGroup
