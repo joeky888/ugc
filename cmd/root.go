@@ -15,7 +15,7 @@ var (
 func init() {
 	// Disable help command
 	rootCmd.SetHelpCommand(&cobra.Command{
-		Use:    "help",
+		Use:    "nohelp",
 		Hidden: true,
 	})
 }
