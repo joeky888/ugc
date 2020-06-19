@@ -21,7 +21,6 @@ func NewConfig() []tool.Conf {
 		},
 		{
 			// Size 'K'
-			// Regex: regexp.MustCompile(`\s\d*[.,]?\dKi?\s`),
 			Regex: regexp.MustCompile(`\s\d*[.,]?\d(K|B)i?\s|\s\d{1,3}\s`),
 			Color: tool.Green,
 		},

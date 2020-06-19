@@ -8,7 +8,6 @@ import (
 
 var pingCmd = &cobra.Command{
 	Use:                "ping",
-	Short:              "ping command",
 	DisableFlagParsing: true,
 	Run: func(cmd *cobra.Command, args []string) {
 		tool.CaptureWorker(ping.NewConfig())

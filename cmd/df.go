@@ -7,8 +7,12 @@ import (
 )
 
 var dfCmd = &cobra.Command{
-	Use:                "df",
-	Short:              "df command",
+	Use: "df",
+	ValidArgs: []string{
+		"-h\tanother",
+		"-a\tdescription for rs",
+		"-b",
+	},
 	DisableFlagParsing: true,
 	Run: func(cmd *cobra.Command, args []string) {
 		tool.CaptureWorker(df.NewConfig())

@@ -6,10 +6,19 @@ import (
 
 var (
 	rootCmd = &cobra.Command{
+		Use:   "ugc",
 		Short: "help message",
 		Long:  `Usage: ./ugc <COMMAND> <ARGS> <ARGS>...`,
 	}
 )
+
+func init() {
+	// Disable help command
+	rootCmd.SetHelpCommand(&cobra.Command{
+		Use:    "help",
+		Hidden: true,
+	})
+}
 
 // Execute executes the root command.
 func Execute() error {
