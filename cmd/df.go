@@ -7,12 +7,7 @@ import (
 )
 
 var dfCmd = &cobra.Command{
-	Use: "df",
-	ValidArgs: []string{
-		"-h\tanother",
-		"-a\tdescription for rs",
-		"-b",
-	},
+	Use:                "df",
 	DisableFlagParsing: true,
 	Run: func(cmd *cobra.Command, args []string) {
 		tool.CaptureWorker(df.NewConfig())
@@ -20,5 +15,7 @@ var dfCmd = &cobra.Command{
 }
 
 func init() {
+	dfCmd.Flags().BoolP("portability", "P", false, "POSIX output format")
+	dfCmd.Flags().BoolP("block-size", "k", false, "1024-byte blocks (default)")
 	rootCmd.AddCommand(dfCmd)
 }

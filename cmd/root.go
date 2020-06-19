@@ -14,10 +14,10 @@ var (
 
 func init() {
 	// Disable help command
-	rootCmd.SetHelpCommand(&cobra.Command{
-		Use:    "nohelp",
-		Hidden: true,
-	})
+	// rootCmd.SetHelpCommand(&cobra.Command{
+	// 	Use:    "nohelp",
+	// 	Hidden: true,
+	// })
 }
 
 // Execute executes the root command.
