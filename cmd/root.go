@@ -1,6 +1,9 @@
 package cmd
 
 import (
+	"github.com/joeky888/ugc/cli/curl"
+	"github.com/joeky888/ugc/cli/df"
+	"github.com/joeky888/ugc/cli/ping"
 	"github.com/spf13/cobra"
 )
 
@@ -18,6 +21,9 @@ func init() {
 	// 	Use:    "nohelp",
 	// 	Hidden: true,
 	// })
+	rootCmd.AddCommand(curl.Cmd)
+	rootCmd.AddCommand(df.Cmd)
+	rootCmd.AddCommand(ping.Cmd)
 }
 
 // Execute executes the root command.
