@@ -53,7 +53,7 @@ func copyAndCapture(w io.Writer, r io.Reader, config []Conf) error {
 			buf = conf.Regex.ReplaceAll(buf, []byte(color))
 		}
 		if _, err := w.Write(buf); err != nil {
-			log.Fatalf("bufn Write() with error %v", err)
+			log.Fatalf("bufn Write() with error %v\n", err)
 		}
 	}
 	// never reached
@@ -84,7 +84,7 @@ func CaptureWorker(config []Conf) {
 
 	defer func() {
 		if err := stdoutIn.Close(); err != nil {
-			log.Fatalf("stdoutIn.Close() failed with %v", err)
+			log.Fatalf("stdoutIn.Close() failed with %v\n", err)
 		}
 	}()
 
@@ -101,16 +101,13 @@ func CaptureWorker(config []Conf) {
 	}()
 
 	go func() {
-		// User Send ctrlc to the program
+		// User sends ctrl-c to the program
 		<-ctrlc
 		// Use Process.Release() instead of Process.Kill()
 		// Release() waits until the cmd exit
 		// Kill() Does not wait
 		if err := cmd.Process.Release(); err != nil {
-			log.Fatalf("failed to kill process: %v", err)
-		}
-		if err := stdoutIn.Close(); err != nil {
-			log.Fatalf("stdoutIn.Close() failed with %v", err)
+			log.Fatalf("failed to kill process: %v\n", err)
 		}
 	}()
 
@@ -131,7 +128,7 @@ func CaptureWorker(config []Conf) {
 		// log.Fatalf("cmd.Wait() failed with %v\n", err)
 	}
 	if errStdout != nil || errStderr != nil {
-		log.Fatal("failed to capture stdout or stderr\n")
+		log.Fatalf("failed to capture stdout or stderr std err, %v\n, %v\n", errStdout, errStderr)
 	}
 
 	os.Exit(statusCode)
