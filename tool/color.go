@@ -5,9 +5,9 @@ import (
 )
 
 type Conf struct {
-	Regex        *regexp.Regexp
-	RegexReplace string
-	Colors       []string
+	Regex      *regexp.Regexp
+	RegexGroup string
+	Colors     []string
 }
 
 const (

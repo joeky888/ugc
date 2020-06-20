@@ -39,7 +39,7 @@ func copyAndCapture(w io.Writer, r io.Reader, config []Conf) error {
 				continue
 			}
 			// Regex group case
-			color := conf.RegexReplace
+			color := conf.RegexGroup
 			for i := range conf.Colors {
 				// Replace $1 with RedBegin$1RedEnd etc.
 				sign := fmt.Sprintf("$%d", i+1)
