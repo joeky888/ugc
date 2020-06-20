@@ -57,8 +57,8 @@ func copyAndCapture(w io.Writer, r io.Reader, config []Conf) error {
 		}
 	}
 	// never reached
-	panic(true)
-	return nil
+	// panic(true)
+	// return nil
 }
 
 func CaptureWorker(config []Conf) {
