@@ -24,7 +24,7 @@ func NewConfig() []tool.Conf {
 			// HTTP header
 			Regex:      regexp.MustCompile(`(?m)^([\w-]+)(\:\s*)(.*)`),
 			RegexGroup: "$1$2$3",
-			Colors:     []string{tool.Red, tool.Default, tool.Green},
+			Colors:     []string{tool.Red, tool.Default, tool.Blue},
 		},
 		{
 			// JSON attribute string value

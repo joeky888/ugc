@@ -72,15 +72,15 @@ func CaptureWorker(config []Conf) {
 	if outpipeErr != nil {
 		log.Fatalf("cmd.StdoutPipe() outpipeErr failed with %v\n", outpipeErr)
 	}
-	// stderrIn, errpipeErr := cmd.StderrPipe()
-	// if errpipeErr != nil {
-	// 	log.Fatalf("cmd.StderrPipe() errpipeErr failed with %v\n", errpipeErr)
-	// }
+	stderrIn, errpipeErr := cmd.StderrPipe()
+	if errpipeErr != nil {
+		log.Fatalf("cmd.StderrPipe() errpipeErr failed with %v\n", errpipeErr)
+	}
 
 	var wg sync.WaitGroup
 	var errStdout, errStderr error
 	colorStdout := colorable.NewColorableStdout()
-	// colorStderr := colorable.NewColorableStderr()
+	colorStderr := colorable.NewColorableStderr()
 
 	defer func() {
 		if err := stdoutIn.Close(); err != nil {
@@ -96,7 +96,7 @@ func CaptureWorker(config []Conf) {
 	}()
 	go func() {
 		// errStderr = copyAndCapture(os.Stderr, stderrIn, config)
-		// errStderr = copyAndCapture(colorStderr, stderrIn, config)
+		errStderr = copyAndCapture(colorStderr, stderrIn, config)
 		wg.Done()
 	}()
 
