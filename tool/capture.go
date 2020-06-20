@@ -1,6 +1,7 @@
 package tool
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"log"
@@ -17,10 +18,14 @@ import (
 // copyAndCapture is a modified version
 // of https://blog.kowalczyk.info/article/wOYk/advanced-command-execution-in-go-with-osexec.html
 func copyAndCapture(w io.Writer, r io.Reader, config []Conf) error {
-	buf := make([]byte, 20480) // 20K buffer to read from stdout/stderr
+	// buf := make([]byte, 2048) // 2K buffer to read from stdout/stderr
+
+	reader := bufio.NewReader(r)
 	for {
-		n, err := r.Read(buf[:])
-		if n == 0 && err != nil {
+		// n, err := r.Read(buf[:])
+		// n, err := reader.Read([]byte("\n"))
+		buf, err := reader.ReadBytes('\n')
+		if len(buf) == 0 && err != nil {
 			// Read returns io.EOF at the end of file, which is not an error for us
 			if err == io.EOF {
 				// err = nil
@@ -29,11 +34,11 @@ func copyAndCapture(w io.Writer, r io.Reader, config []Conf) error {
 			return err
 		}
 
-		bufn := buf[:n]
+		// bufn := buf[:n]
 		for _, conf := range config {
 			// Normal regex case
 			if len(conf.Colors) == 1 {
-				bufn = conf.Regex.ReplaceAllFunc(bufn, func(m []byte) []byte {
+				buf = conf.Regex.ReplaceAllFunc(buf, func(m []byte) []byte {
 					return []byte(fmt.Sprintf(conf.Colors[0], conf.Regex.Find(m)))
 				})
 				continue
@@ -50,9 +55,9 @@ func copyAndCapture(w io.Writer, r io.Reader, config []Conf) error {
 					1,
 				)
 			}
-			bufn = conf.Regex.ReplaceAll(bufn, []byte(color))
+			buf = conf.Regex.ReplaceAll(buf, []byte(color))
 		}
-		if _, err := w.Write(bufn); err != nil {
+		if _, err := w.Write(buf); err != nil {
 			log.Fatalf("bufn Write() with error %v", err)
 		}
 	}
@@ -72,15 +77,21 @@ func CaptureWorker(config []Conf) {
 	if outpipeErr != nil {
 		log.Fatalf("cmd.StdoutPipe() outpipeErr failed with %v\n", outpipeErr)
 	}
-	stderrIn, errpipeErr := cmd.StderrPipe()
-	if errpipeErr != nil {
-		log.Fatalf("cmd.StderrPipe() errpipeErr failed with %v\n", errpipeErr)
-	}
+	// stderrIn, errpipeErr := cmd.StderrPipe()
+	// if errpipeErr != nil {
+	// 	log.Fatalf("cmd.StderrPipe() errpipeErr failed with %v\n", errpipeErr)
+	// }
 
 	var wg sync.WaitGroup
 	var errStdout, errStderr error
 	colorStdout := colorable.NewColorableStdout()
-	colorStderr := colorable.NewColorableStderr()
+	// colorStderr := colorable.NewColorableStderr()
+
+	defer func() {
+		if err := stdoutIn.Close(); err != nil {
+			log.Fatalf("stdoutIn.Close() failed with %v", err)
+		}
+	}()
 
 	wg.Add(2)
 	go func() {
@@ -90,7 +101,7 @@ func CaptureWorker(config []Conf) {
 	}()
 	go func() {
 		// errStderr = copyAndCapture(os.Stderr, stderrIn, config)
-		errStderr = copyAndCapture(colorStderr, stderrIn, config)
+		// errStderr = copyAndCapture(colorStderr, stderrIn, config)
 		wg.Done()
 	}()
 
@@ -102,6 +113,9 @@ func CaptureWorker(config []Conf) {
 		// Kill() Does not wait
 		if err := cmd.Process.Release(); err != nil {
 			log.Fatalf("failed to kill process: %v", err)
+		}
+		if err := stdoutIn.Close(); err != nil {
+			log.Fatalf("stdoutIn.Close() failed with %v", err)
 		}
 	}()
 

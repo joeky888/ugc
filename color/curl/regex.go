@@ -56,10 +56,10 @@ func NewConfig() []tool.Conf {
 			RegexReplace: "$1$2$3",
 			Colors:       []string{tool.Red, tool.Default, tool.Default},
 		},
-		{
-			// Brackets
-			Regex: regexp.MustCompile(`\{|\}`),
-			Colors: []string{tool.Blue},
-		},
+		// {
+		// 	// Brackets
+		// 	Regex: regexp.MustCompile(`\{|\}`),
+		// 	Colors: []string{tool.Blue},
+		// },
 	}
 }
