@@ -18,23 +18,18 @@ import (
 // copyAndCapture is a modified version
 // of https://blog.kowalczyk.info/article/wOYk/advanced-command-execution-in-go-with-osexec.html
 func copyAndCapture(w io.Writer, r io.Reader, config []Conf) error {
-	// buf := make([]byte, 2048) // 2K buffer to read from stdout/stderr
-
 	reader := bufio.NewReader(r)
 	for {
-		// n, err := r.Read(buf[:])
-		// n, err := reader.Read([]byte("\n"))
+		// Read line by line
 		buf, err := reader.ReadBytes('\n')
 		if len(buf) == 0 && err != nil {
 			// Read returns io.EOF at the end of file, which is not an error for us
 			if err == io.EOF {
-				// err = nil
 				return nil
 			}
 			return err
 		}
 
-		// bufn := buf[:n]
 		for _, conf := range config {
 			// Normal regex case
 			if len(conf.Colors) == 1 {
@@ -46,8 +41,8 @@ func copyAndCapture(w io.Writer, r io.Reader, config []Conf) error {
 			// Regex group case
 			color := conf.RegexReplace
 			for i := range conf.Colors {
-				sign := fmt.Sprintf("$%d", i+1)
 				// Replace $1 with RedBegin$1RedEnd etc.
+				sign := fmt.Sprintf("$%d", i+1)
 				color = strings.Replace(
 					color,
 					sign,
