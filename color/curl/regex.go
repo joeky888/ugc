@@ -11,44 +11,55 @@ import (
 func NewConfig() []tool.Conf {
 	return []tool.Conf{
 		{
-			// HTTP header
-			Regex: regexp.MustCompile(`(?m)^([A-Z].*)\:\s(.*)$`),
-			Color: tool.Blue,
-		},
-		{
 			// HTTP success
-			Regex: regexp.MustCompile(`(?m)^HTTP.*?\s([1-3]\d{2}.*)$`),
-			Color: tool.Green,
+			Regex:  regexp.MustCompile(`(?m)^HTTP.*?\s([1-3]\d{2}.*)$`),
+			Colors: []string{tool.Green},
 		},
 		{
 			// HTTP error
-			Regex: regexp.MustCompile(`(?m)^HTTP.*?\s([4|5]\d{2}.*)$`),
-			Color: tool.Red,
+			Regex:  regexp.MustCompile(`(?m)^HTTP.*?\s([4|5]\d{2}.*)$`),
+			Colors: []string{tool.Red},
 		},
 		{
-			// JSON attribute
-			Regex: regexp.MustCompile(`(\".*\")\:`),
-			Color: tool.Blue,
-		},
-		// {
-		// 	// String value
-		// 	Regex: regexp.MustCompile(`\s*(\".*\")`),
-		// 	Color: tool.Yellow,
-		// },
-		// {
-		// 	// Number value
-		// 	Regex: regexp.MustCompile(`\s*(\d+)`),
-		// 	Color: tool.Purple,
-		// },
-		{
-			// Boolean value
-			Regex: regexp.MustCompile(`\s*(true|false)`),
-			Color: tool.Purple,
+			// HTTP header
+			Regex:  regexp.MustCompile(`(?m)^([\w-]+)(\:\s*)(.*)`),
+			RegexReplace: "$1$2$3",
+			Colors: []string{tool.Red, tool.Default, tool.Green},
 		},
 		{
-			// Null value
-			Regex: regexp.MustCompile(`\s*(null)`),
-			Color: tool.Red,
+			// JSON attribute string value
+			Regex:        regexp.MustCompile(`(\".*\")(\s*\:\s*)(\".*\")`),
+			RegexReplace: "$1$2$3",
+			Colors:       []string{tool.Red, tool.Default, tool.Yellow},
+		},
+		{
+			// JSON attribute number/boolean value
+			Regex:        regexp.MustCompile(`(\".*\")(\s*\:\s*)(-?[0-9\.]+)`),
+			RegexReplace: "$1$2$3",
+			Colors:       []string{tool.Red, tool.Default, tool.Blue},
+		},
+		{
+			// JSON attribute boolean value
+			Regex:        regexp.MustCompile(`(\".*\")(\s*\:\s*)(true|false)`),
+			RegexReplace: "$1$2$3",
+			Colors:       []string{tool.Red, tool.Default, tool.Purple},
+		},
+		{
+			// JSON attribute null value
+			Regex:        regexp.MustCompile(`(\".*\")(\s*\:\s*)(null)`),
+			RegexReplace: "$1$2$3",
+			Colors:       []string{tool.Red, tool.Default, tool.Gray},
+		},
+		{
+			// JSON attribute object|array value
+			Regex:        regexp.MustCompile(`(\".*\")(\s*\:\s*)(\{|\[)`),
+			RegexReplace: "$1$2$3",
+			Colors:       []string{tool.Red, tool.Default, tool.Default},
+		},
+		{
+			// Brackets
+			Regex: regexp.MustCompile(`\{|\}`),
+			Colors: []string{tool.Blue},
 		},
 	}
 }

@@ -5,11 +5,13 @@ import (
 )
 
 type Conf struct {
-	Regex *regexp.Regexp
-	Color string
+	Regex        *regexp.Regexp
+	RegexReplace string
+	Colors       []string
 }
 
 const (
+	Default = "%s"
 	Black   = "\033[0;30m%s\033[0m"
 	Red     = "\033[1;31m%s\033[0m"
 	Green   = "\033[1;32m%s\033[0m"
