@@ -10,6 +10,8 @@ import (
 	"strings"
 	"sync"
 	"syscall"
+
+	"github.com/mattn/go-colorable"
 )
 
 // copyAndCapture is a modified version
@@ -77,14 +79,18 @@ func CaptureWorker(config []Conf) {
 
 	var wg sync.WaitGroup
 	var errStdout, errStderr error
+	colorStdout := colorable.NewColorableStdout()
+	colorStderr := colorable.NewColorableStderr()
 
 	wg.Add(2)
 	go func() {
-		errStdout = copyAndCapture(os.Stdout, stdoutIn, config)
+		// errStdout = copyAndCapture(os.Stdout, stdoutIn, config)
+		errStdout = copyAndCapture(colorStdout, stdoutIn, config)
 		wg.Done()
 	}()
 	go func() {
-		errStderr = copyAndCapture(os.Stderr, stderrIn, config)
+		// errStderr = copyAndCapture(os.Stderr, stderrIn, config)
+		errStderr = copyAndCapture(colorStderr, stderrIn, config)
 		wg.Done()
 	}()
 
