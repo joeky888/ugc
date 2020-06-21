@@ -27,7 +27,7 @@ type Conf struct {
 // genRegexGroup(5) = "$1$2$3$4$5"
 func genRegexGroup(n int) string {
 	if n <= 1 {
-		log.Fatalln("genRegexGroup is only used for regex group case")
+		log.Panicln("genRegexGroup is only used for regex group case")
 	}
 	rg := ""
 	for i := 1; i < n+1; i++ {
@@ -37,8 +37,8 @@ func genRegexGroup(n int) string {
 }
 
 // toColoredText Convert plain text to colored text according to the regex config
-func toColoredText(buf []byte, config []Conf) []byte {
-	for _, conf := range config {
+func toColoredText(buf []byte, configs []Conf) []byte {
+	for _, conf := range configs {
 		// Case 1: Normal regex case
 		if len(conf.Colors) == 1 {
 			buf = conf.Regex.ReplaceAllFunc(buf, func(m []byte) []byte {
@@ -66,10 +66,10 @@ func toColoredText(buf []byte, config []Conf) []byte {
 
 // copyAndCapture is a modified version
 // of https://blog.kowalczyk.info/article/wOYk/advanced-command-execution-in-go-with-osexec.html
-func copyAndCapture(w io.Writer, r io.Reader, config []Conf) error {
+func copyAndCapture(w io.Writer, r io.Reader, configs []Conf) error {
 	reader := bufio.NewReader(r)
 	for {
-		// Read line by line
+		// Read from pipe line by line
 		buf, err := reader.ReadBytes('\n')
 		if len(buf) == 0 && err != nil {
 			// Read returns io.EOF at the end of file, which is not an error for us
@@ -79,10 +79,10 @@ func copyAndCapture(w io.Writer, r io.Reader, config []Conf) error {
 			return err
 		}
 
-		buf = toColoredText(buf, config)
+		buf = toColoredText(buf, configs)
 
 		if _, err := w.Write(buf); err != nil {
-			log.Fatalf("copyAndCapture buf Write() with error %v\n", err)
+			log.Panicf("copyAndCapture buf Write() with error %v\n", err)
 		}
 	}
 	// never reached
@@ -99,11 +99,11 @@ func CaptureWorker(config []Conf) {
 
 	stdoutIn, outpipeErr := cmd.StdoutPipe()
 	if outpipeErr != nil {
-		log.Fatalf("cmd.StdoutPipe() outpipeErr failed with %v\n", outpipeErr)
+		log.Panicf("cmd.StdoutPipe() outpipeErr failed with %v\n", outpipeErr)
 	}
 	stderrIn, errpipeErr := cmd.StderrPipe()
 	if errpipeErr != nil {
-		log.Fatalf("cmd.StderrPipe() errpipeErr failed with %v\n", errpipeErr)
+		log.Panicf("cmd.StderrPipe() errpipeErr failed with %v\n", errpipeErr)
 	}
 
 	var wg sync.WaitGroup
@@ -113,10 +113,10 @@ func CaptureWorker(config []Conf) {
 
 	defer func() {
 		if err := stdoutIn.Close(); err != nil {
-			log.Fatalf("stdoutIn.Close() failed with %v\n", err)
+			log.Panicf("stdoutIn.Close() failed with %v\n", err)
 		}
 		if err := stderrIn.Close(); err != nil {
-			log.Fatalf("stderrIn.Close() failed with %v\n", err)
+			log.Panicf("stderrIn.Close() failed with %v\n", err)
 		}
 	}()
 
@@ -134,12 +134,12 @@ func CaptureWorker(config []Conf) {
 		// User sends ctrl-c to the program
 		<-ctrlc
 		if err := cmd.Process.Release(); err != nil {
-			log.Fatalf("failed to kill process: %v\n", err)
+			log.Panicf("failed to kill process: %v\n", err)
 		}
 	}()
 
 	if err := cmd.Start(); err != nil {
-		log.Fatalf("cmd.Start() failed with %v\n", err)
+		log.Panicf("cmd.Start() failed with %v\n", err)
 	}
 
 	wg.Wait()
@@ -152,10 +152,10 @@ func CaptureWorker(config []Conf) {
 		} else {
 			statusCode = -1
 		}
-		// log.Fatalf("cmd.Wait() failed with %v\n", err)
+		// log.Panicf("cmd.Wait() failed with %v\n", err)
 	}
 	if errStdout != nil || errStderr != nil {
-		log.Fatalf("failed to capture stdout or stderr std err, %v\n, %v\n", errStdout, errStderr)
+		log.Panicf("failed to capture stdout or stderr std err, %v\n, %v\n", errStdout, errStderr)
 	}
 
 	os.Exit(statusCode)

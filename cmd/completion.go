@@ -21,17 +21,17 @@ var (
 			switch args[0] {
 			case "bash":
 				if err := cmd.Root().GenBashCompletion(os.Stdout); err != nil {
-					log.Fatalf("GenBashCompletion failed with %v\n", err)
+					log.Panicf("GenBashCompletion failed with %v\n", err)
 				}
 			case "zsh":
 				runCompletionZsh(cmd, os.Stdout)
 			case "powershell":
 				if err := cmd.Root().GenPowerShellCompletion(os.Stdout); err != nil {
-					log.Fatalf("GenPowerShellCompletion failed with %v\n", err)
+					log.Panicf("GenPowerShellCompletion failed with %v\n", err)
 				}
 			case "fish":
 				if err := cmd.Root().GenFishCompletion(os.Stdout, true); err != nil {
-					log.Fatalf("GenFishCompletion failed with %v\n", err)
+					log.Panicf("GenFishCompletion failed with %v\n", err)
 				}
 			}
 		},
@@ -44,10 +44,10 @@ func init() {
 
 func runCompletionZsh(cmd *cobra.Command, out io.Writer) {
 	if err := cmd.Root().GenZshCompletion(out); err != nil {
-		log.Fatalf("GenZshCompletion failed with %v\n", err)
+		log.Panicf("GenZshCompletion failed with %v\n", err)
 	}
 
 	if _, err := io.WriteString(out, zshCompdef); err != nil {
-		log.Fatalf("zshCompdef failed with %v\n", err)
+		log.Panicf("zshCompdef failed with %v\n", err)
 	}
 }
