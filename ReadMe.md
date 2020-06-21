@@ -10,6 +10,12 @@ source <(ugc completion bash)
 source <(ugc completion zsh)
 ```
 
+#### Powershell completion (Requires powershell > 5.0)
+
+```powershell
+ugc.exe completion powershell | Out-String | Invoke-Expression
+```
+
 #### Inspired by
 
 * [grc](https://github.com/garabik/grc)
