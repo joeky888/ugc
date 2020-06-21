@@ -22,33 +22,33 @@ func NewConfig() []tool.Conf {
 		},
 		{
 			// HTTP header
-			Regex:      regexp.MustCompile(`(?m)^([\w-]+)(\:\s*)(.*)`),
-			Colors:     []string{tool.Red, tool.Default, tool.Green},
+			Regex:  regexp.MustCompile(`(?m)^([\w-]+)(\:\s*)(.*)`),
+			Colors: []string{tool.Red, tool.Default, tool.Green},
 		},
 		{
 			// JSON attribute string value
-			Regex:      regexp.MustCompile(`(\".*?\")(\s*\:\s*)(\".*?\")`),
-			Colors:     []string{tool.Red, tool.Default, tool.Yellow},
+			Regex:  regexp.MustCompile(`(\".*?\")(\s*\:\s*)(\".*?\")`),
+			Colors: []string{tool.Red, tool.Default, tool.Yellow},
 		},
 		{
 			// JSON attribute number/boolean value
-			Regex:      regexp.MustCompile(`(\".*?\")(\s*\:\s*)(-?[0-9\.]+)`),
-			Colors:     []string{tool.Red, tool.Default, tool.Blue},
+			Regex:  regexp.MustCompile(`(\".*?\")(\s*\:\s*)(-?[0-9\.]+)`),
+			Colors: []string{tool.Red, tool.Default, tool.Blue},
 		},
 		{
 			// JSON attribute boolean value
-			Regex:      regexp.MustCompile(`(\".*?\")(\s*\:\s*)(true|false)`),
-			Colors:     []string{tool.Red, tool.Default, tool.Purple},
+			Regex:  regexp.MustCompile(`(\".*?\")(\s*\:\s*)(true|false)`),
+			Colors: []string{tool.Red, tool.Default, tool.Purple},
 		},
 		{
 			// JSON attribute null value
-			Regex:      regexp.MustCompile(`(\".*?\")(\s*\:\s*)(null)`),
-			Colors:     []string{tool.Red, tool.Default, tool.Gray},
+			Regex:  regexp.MustCompile(`(\".*?\")(\s*\:\s*)(null)`),
+			Colors: []string{tool.Red, tool.Default, tool.Gray},
 		},
 		{
 			// JSON attribute object|array value
-			Regex:      regexp.MustCompile(`(\".*?\")(\s*\:\s*)(\{|\[)`),
-			Colors:     []string{tool.Red, tool.Default, tool.Default},
+			Regex:  regexp.MustCompile(`(\".*?\")(\s*\:\s*)(\{|\[)`),
+			Colors: []string{tool.Red, tool.Default, tool.Default},
 		},
 		// {
 		// 	// Brackets

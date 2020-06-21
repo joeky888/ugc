@@ -36,6 +36,34 @@ func genRegexGroup(n int) string {
 	return rg
 }
 
+// toColoredText Convert plain text to colored text according to the regex config
+func toColoredText(buf []byte, config []Conf) []byte {
+	for _, conf := range config {
+		// Case 1: Normal regex case
+		if len(conf.Colors) == 1 {
+			buf = conf.Regex.ReplaceAllFunc(buf, func(m []byte) []byte {
+				return []byte(fmt.Sprintf(conf.Colors[0], conf.Regex.Find(m)))
+			})
+			continue
+		}
+
+		// Case 2: Regex group case
+		color := genRegexGroup(len(conf.Colors))
+		for i := range conf.Colors {
+			// Replace "$1" with "RedBegin$1RedEnd" etc.
+			sign := fmt.Sprintf("$%d", i+1)
+			color = strings.Replace(
+				color,
+				sign,
+				fmt.Sprintf(conf.Colors[i], sign),
+				1,
+			)
+		}
+		buf = conf.Regex.ReplaceAll(buf, []byte(color))
+	}
+	return buf
+}
+
 // copyAndCapture is a modified version
 // of https://blog.kowalczyk.info/article/wOYk/advanced-command-execution-in-go-with-osexec.html
 func copyAndCapture(w io.Writer, r io.Reader, config []Conf) error {
@@ -51,31 +79,10 @@ func copyAndCapture(w io.Writer, r io.Reader, config []Conf) error {
 			return err
 		}
 
-		for _, conf := range config {
-			// Case 1: Normal regex case
-			if len(conf.Colors) == 1 {
-				buf = conf.Regex.ReplaceAllFunc(buf, func(m []byte) []byte {
-					return []byte(fmt.Sprintf(conf.Colors[0], conf.Regex.Find(m)))
-				})
-				continue
-			}
+		buf = toColoredText(buf, config)
 
-			// Case 2: Regex group case
-			color := genRegexGroup(len(conf.Colors))
-			for i := range conf.Colors {
-				// Replace $1 with RedBegin$1RedEnd etc.
-				sign := fmt.Sprintf("$%d", i+1)
-				color = strings.Replace(
-					color,
-					sign,
-					fmt.Sprintf(conf.Colors[i], sign),
-					1,
-				)
-			}
-			buf = conf.Regex.ReplaceAll(buf, []byte(color))
-		}
 		if _, err := w.Write(buf); err != nil {
-			log.Fatalf("bufn Write() with error %v\n", err)
+			log.Fatalf("copyAndCapture buf Write() with error %v\n", err)
 		}
 	}
 	// never reached
@@ -108,16 +115,17 @@ func CaptureWorker(config []Conf) {
 		if err := stdoutIn.Close(); err != nil {
 			log.Fatalf("stdoutIn.Close() failed with %v\n", err)
 		}
+		if err := stderrIn.Close(); err != nil {
+			log.Fatalf("stderrIn.Close() failed with %v\n", err)
+		}
 	}()
 
 	wg.Add(2)
 	go func() {
-		// errStdout = copyAndCapture(os.Stdout, stdoutIn, config)
 		errStdout = copyAndCapture(colorStdout, stdoutIn, config)
 		wg.Done()
 	}()
 	go func() {
-		// errStderr = copyAndCapture(os.Stderr, stderrIn, config)
 		errStderr = copyAndCapture(colorStderr, stderrIn, config)
 		wg.Done()
 	}()
@@ -125,9 +133,6 @@ func CaptureWorker(config []Conf) {
 	go func() {
 		// User sends ctrl-c to the program
 		<-ctrlc
-		// Use Process.Release() instead of Process.Kill()
-		// Release() waits until the cmd exit
-		// Kill() Does not wait
 		if err := cmd.Process.Release(); err != nil {
 			log.Fatalf("failed to kill process: %v\n", err)
 		}
