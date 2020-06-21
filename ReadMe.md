@@ -10,7 +10,9 @@ source <(ugc completion bash)
 source <(ugc completion zsh)
 ```
 
-#### Powershell completion (Requires powershell > 5.0): add this line to profile.ps1
+#### Powershell completion: add this line to profile.ps1
+
+This requires powershell > 5.0, which comes with Win10 but can be downloaded for Win7/Win8
 
 ```powershell
 ugc.exe completion powershell | Out-String | Invoke-Expression
