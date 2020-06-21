@@ -1,15 +1,5 @@
 package tool
 
-import (
-	"regexp"
-)
-
-type Conf struct {
-	Regex      *regexp.Regexp
-	RegexGroup string
-	Colors     []string
-}
-
 const (
 	Default = "%s"
 	Red     = "\033[38;05;160m%s\033[0m"

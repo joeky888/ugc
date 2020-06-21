@@ -23,37 +23,31 @@ func NewConfig() []tool.Conf {
 		{
 			// HTTP header
 			Regex:      regexp.MustCompile(`(?m)^([\w-]+)(\:\s*)(.*)`),
-			RegexGroup: "$1$2$3",
-			Colors:     []string{tool.Red, tool.Default, tool.Blue},
+			Colors:     []string{tool.Red, tool.Default, tool.Green},
 		},
 		{
 			// JSON attribute string value
 			Regex:      regexp.MustCompile(`(\".*?\")(\s*\:\s*)(\".*?\")`),
-			RegexGroup: "$1$2$3",
 			Colors:     []string{tool.Red, tool.Default, tool.Yellow},
 		},
 		{
 			// JSON attribute number/boolean value
 			Regex:      regexp.MustCompile(`(\".*?\")(\s*\:\s*)(-?[0-9\.]+)`),
-			RegexGroup: "$1$2$3",
 			Colors:     []string{tool.Red, tool.Default, tool.Blue},
 		},
 		{
 			// JSON attribute boolean value
 			Regex:      regexp.MustCompile(`(\".*?\")(\s*\:\s*)(true|false)`),
-			RegexGroup: "$1$2$3",
 			Colors:     []string{tool.Red, tool.Default, tool.Purple},
 		},
 		{
 			// JSON attribute null value
 			Regex:      regexp.MustCompile(`(\".*?\")(\s*\:\s*)(null)`),
-			RegexGroup: "$1$2$3",
 			Colors:     []string{tool.Red, tool.Default, tool.Gray},
 		},
 		{
 			// JSON attribute object|array value
 			Regex:      regexp.MustCompile(`(\".*?\")(\s*\:\s*)(\{|\[)`),
-			RegexGroup: "$1$2$3",
 			Colors:     []string{tool.Red, tool.Default, tool.Default},
 		},
 		// {
