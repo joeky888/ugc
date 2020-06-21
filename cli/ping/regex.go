@@ -36,7 +36,7 @@ func NewConfig() []tool.Conf {
 		},
 		{
 			// last line min/avg/max/mdev
-			Regex:      regexp.MustCompile(`(\=\s)([0-9\.]+)(\/)([0-9\.]+)(\/)([0-9\.]+)(\/)([0-9\.]+)`),
+			Regex:      regexp.MustCompile(`(\s)(min|[0-9\.]+)(\/)(avg|[0-9\.]+)(\/)(max|[0-9\.]+)(\/)(mdev|[0-9\.]+)`),
 			Colors:     []string{tool.Default, tool.Yellow, tool.Default, tool.Blue, tool.Default, tool.Red, tool.Default, tool.Red},
 		},
 		{
