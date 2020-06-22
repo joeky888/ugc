@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/joeky888/ugc/cli/curl"
 	"github.com/joeky888/ugc/cli/df"
+	"github.com/joeky888/ugc/cli/docker"
 	"github.com/joeky888/ugc/cli/ping"
 	"github.com/spf13/cobra"
 )
@@ -23,6 +24,7 @@ func init() {
 	// })
 	rootCmd.AddCommand(curl.Cmd)
 	rootCmd.AddCommand(df.Cmd)
+	rootCmd.AddCommand(docker.Cmd)
 	rootCmd.AddCommand(ping.Cmd)
 }
 
